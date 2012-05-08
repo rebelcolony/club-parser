@@ -1,5 +1,5 @@
 module ClubParser
-	class AmnesiaParser
+	class PachaParser
 		attr_reader :text, :events
 
 		def initialize(text)
@@ -11,7 +11,7 @@ module ClubParser
 
 
 		def self.parse(text)
-			AmnesiaParser.new(text).events
+			PachaParser.new(text).events
 		end
 
 		def to_s
@@ -19,7 +19,7 @@ module ClubParser
 
 		private
 		def parse
-			@doc.css('.ticket').each do |ticket|
+			@doc.css('.has_events').each do |ticket|
 				event = Event.new
 				event.date = parse_date(ticket)
 				event.title = parse_title(ticket)
@@ -29,29 +29,17 @@ module ClubParser
 		end
 
 		def parse_date(node)
-			Date.parse(node.at_css('.date'))
+			Date.parse(node['id'])
 		end
 
 		def parse_title(node)
-			node.at_css('.party.movement').text
+			node.at_css('.node-title').text
 		end
 
 		def parse_places(node)
 			places = []
-			node.css('.info').each do |p|
-				title = parse_place_title(p)
-				lineup = parse_place_lineup(p)
-				places << Place.new(title, lineup)
-			end
+			places << Place.new(node.at_css('.node-title').text, node.at_css('.node-data-field-artists-field-artists-value').text)
 			places
-		end
-
-		def parse_place_title(node)
-			node.at_css('.place.movement').text
-		end
-
-		def parse_place_lineup(node)
-			node.at_css('.lineup').text
 		end
 	end
 end
