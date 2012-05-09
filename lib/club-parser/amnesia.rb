@@ -64,7 +64,7 @@ module ClubParser
 				end
 				price
 			else
-				nil
+				Price.new
 			end
 		end
 

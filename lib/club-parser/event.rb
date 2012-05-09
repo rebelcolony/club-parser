@@ -24,7 +24,7 @@ module ClubParser
 	class Price
 		attr_accessor :regular, :vip, :no_queue
 
-		def initialize(regular, vip = nil, no_queue = nil)
+		def initialize(regular = 0, vip = 0, no_queue = 0)
 			@regular = regular
 			@vip = vip
 			@no_queue = no_queue
@@ -32,10 +32,10 @@ module ClubParser
 
 		def to_hash
 			result = {
-				regular: @regular
+				regular: @regular,
+				vip: @vip,
+				no_queue: @no_queue
 			}
-			result[:vip] = @vip unless @vip.nil?
-			result[:no_queue] = @no_queue unless @no_queue.nil? 
 		end
 	end
 
@@ -54,9 +54,9 @@ module ClubParser
 					flyer: @flyer
 			}
 
-			@price.nil? ? result[:price_attributes] = Price.new(0).to_hash : result[:price_attributes] = @price.to_hash
+			result[:price_attributes] = @price.to_hash
 
-			result[:places_attributes] = @places.collect.with_index { |p, i| { i => p }}
+			result[:places_attributes] = @places.collect(&:to_hash)
 
 			result
 		end
