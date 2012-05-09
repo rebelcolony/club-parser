@@ -54,7 +54,7 @@ module ClubParser
 					flyer: @flyer
 			}
 
-			result[:price_attributes] = @price.to_hash if @price
+			result[:price_attributes] = [@price.to_hash] if @price
 
 			result[:places_attributes] = @places.map(&:to_hash)
 
