@@ -10,34 +10,30 @@ module ClubParser
 		end
 
 
-		def self.parse(text)
-			PachaParser.new(text).events
-		end
-
-		def self.fetch_all
-			year = Time.now.strftime("%Y")
-			month = Time.now.strftime("%m")
-			self.fetch_for_month(year, month)
-		end
-
 		def to_hash
 			result = { pacha: { events: [] } }
 			result[:pacha][:events] = @events.map(&:to_hash)
 			result
 		end
 
-		def self.fetch_for_this_month
-			year = Time.now.strftime("%Y")
-			month = Time.now.strftime("%m")
-			self.fetch_for_month(year, month)
+
+		def self.parse(text)
+			PachaParser.new(text).to_hash
 		end
 
-		def self.fetch_for_month(year, month)
-			url = "http://www.pacha.com/calendar/#{year}-#{month}"
-			PachaParser.new(open(url)).to_hash
+		def self.fetch_all(from = 23, to = 39)
+			results = { pacha: { events: [] } }
+			results[:pacha][:events] += self.parse_month[:pacha][:events]
+			results
 		end
 
-		private
+		def self.parse_month(month = nil, year = nil)
+			year = Time.now.strftime("%Y") if year.nil?
+			month = Time.now.strftime("%m") if month.nil?
+			self.parse open("http://www.pacha.com/calendar/#{year}-#{month}")
+		end
+
+		protected
 		def parse
 			@doc.css('.has-events').each do |ticket|
 				ticket.css('.view-item').each do |node|
@@ -45,6 +41,9 @@ module ClubParser
 					event.date = parse_date(ticket)
 					event.title = parse_title(node)
 					event.places = parse_places(node)
+					event.url = parse_url(node)
+					event.flyer = parse_flyer(node)
+					event.price = Price.new
 					@events << event
 				end
 			end
@@ -52,6 +51,16 @@ module ClubParser
 
 		def parse_date(node)
 			Date.parse(node['id'][-10, 10])
+		end
+
+		def parse_url(node)
+			node.at_css('a')[:href]
+		end
+
+		def parse_flyer(node)
+			url = node.at_css('a')[:href]
+			doc = Nokogiri::HTML open('http://www.pacha.com/' + url)
+			doc.at_css('img.imagecache')[:src]
 		end
 
 		def parse_title(node)

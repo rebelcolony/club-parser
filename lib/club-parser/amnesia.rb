@@ -44,7 +44,7 @@ module ClubParser
 		end
 
 		def parse_date(node)
-			Date.parse(node.at_css('.date'))
+			Date.parse(node.at_css('.date').text)
 		end
 
 		def parse_title(node)
