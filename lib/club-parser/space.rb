@@ -23,7 +23,7 @@ module ClubParser
 		def self.fetch_all
 			@url = "http://shop.spaceibiza.com/index.php?dispatch=categories.view&category_id=165&next_time=#{Time.now.to_i}"
 			results = { space: { events: [] } }
-			results[:space][:events] = self.parse(open(url))[:space][:events]
+			results[:space][:events] = self.parse(open(@url))[:space][:events]
 			results
 		end
 

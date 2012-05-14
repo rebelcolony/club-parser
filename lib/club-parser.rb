@@ -10,10 +10,9 @@ module ClubParser
 
   def self.fetch_all_from(club)
   	case club
-  	when :amnesia
-  		ClubParser::AmnesiaParser.fetch_all
-  	when :pacha
-  		ClubParser::PachaParser.fetch_all
+  	when :amnesia then ClubParser::AmnesiaParser.fetch_all
+  	when :pacha then ClubParser::PachaParser.fetch_all
+    when :space then ClubParser::SpaceParser.fetch_all
   	else
   		{}
   	end
