@@ -54,7 +54,7 @@ module ClubParser
 		end
 
 		def parse_url(node)
-			"www.pacha.com" + node.at_css('a')[:href]
+			"http://www.pacha.com" + node.at_css('a')[:href]
 		end
 
 		def parse_flyer(node)
