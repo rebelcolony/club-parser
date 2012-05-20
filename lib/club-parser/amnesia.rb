@@ -1,3 +1,4 @@
+# encoding: utf-8
 module ClubParser
 	class AmnesiaParser
 		attr_reader :text, :events
@@ -69,11 +70,11 @@ module ClubParser
 		end
 
 		def parse_url(node)
-			"http://www.amnesia.es" + node.css('a').last[:href]
+			"http://www.amnesia.es" + node.css('a').last[:href].gsub('é', '')
 		end
 
 		def parse_flyer(node)
-			url = "http://www.amnesia.es" + node.css('a').last[:href]
+			url = "http://www.amnesia.es" + node.css('a').last[:href].gsub('é', '')
 			doc = Nokogiri::HTML(open(url))
 			"http://www.amnesia.es" + doc.at_css('#partyimg')[:src][2..-1]
 		end
