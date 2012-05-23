@@ -8,6 +8,7 @@ module ClubParser
   autoload :SpaceParser, File.expand_path('club-parser/space.rb', File.dirname(__FILE__))
   autoload :EsparadisParser, File.expand_path('club-parser/esparadis.rb', File.dirname(__FILE__))
   autoload :PrivilegeParser, File.expand_path('club-parser/privilege.rb', File.dirname(__FILE__))
+  autoload :EdenParser, File.expand_path('club-parser/eden.rb', File.dirname(__FILE__))
   autoload :Event, File.expand_path('club-parser/event.rb', File.dirname(__FILE__))
 
   def self.fetch_all_from(club)
@@ -17,6 +18,7 @@ module ClubParser
     when :space then ClubParser::SpaceParser.fetch_all
     when :esparadis then ClubParser::EsparadisParser.fetch_all
     when :privilege then ClubParser::PrivilegeParser.fetch_all
+    when :eden then ClubParser::EdenParser.fetch_all
   	else
   		{}
   	end
